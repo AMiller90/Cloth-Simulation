@@ -66,6 +66,11 @@ namespace Assets.Scripts
         private List<Particle> particles;
 
         /// <summary>
+        /// The Mono particles.
+        /// </summary>
+        private List<MonoParticle> Monoparticles;
+
+        /// <summary>
         /// The springs.
         /// </summary>
         private List<SpringDamper> springs;
@@ -127,6 +132,8 @@ namespace Assets.Scripts
             }
 
             this.particles = new List<Particle>();
+
+            this.Monoparticles = new List<MonoParticle>();
 
             this.triangles = new List<Triangle>();
 
@@ -222,11 +229,15 @@ namespace Assets.Scripts
             this.Borders();
 
             // Update the particles movement
-            foreach (Particle p in this.particles)
+            foreach (MonoParticle p in this.Monoparticles)
             { // If its not anchored then apply movement
-                if (!p.Anchor)
+                if (!p.ParticleRef.Anchor)
                 {
-                    p.UpdateParticle();
+                   p.transform.position = p.ParticleRef.UpdateParticle();
+                }
+                else
+                {
+                    p.ParticleRef.Position = p.transform.position;
                 }
             }
         }
@@ -277,20 +288,24 @@ namespace Assets.Scripts
 
                 x += 2;
 
+                Particle P = new Particle(new Vector3(x, y, 0));
                 // Instantiate and name it
-                this.prefab.gameObject.transform.position = new Vector3(x, y, 0);
+                this.prefab.transform.position = new Vector3(x, y, 0);
                 GameObject node = Instantiate(this.prefab) as GameObject;
                 node.name = "Particle " + (i + 1);
                 node.transform.SetParent(holder.transform);
 
                 // if the instance doesnt have the particle component..then add it
-                if (!this.prefab.GetComponent<Particle>())
+                if (!this.prefab.GetComponent<MonoParticle>())
                 {
-                    node.gameObject.AddComponent<Particle>();
+                    node.AddComponent<MonoParticle>();
                 }
 
-                // Add it to the list of partices
-                this.particles.Add(node.gameObject.GetComponent<Particle>());
+                node.GetComponent<MonoParticle>().ParticleRef = P;
+
+                // Add it to the list of particles
+                this.particles.Add(P);
+                this.Monoparticles.Add(node.GetComponent<MonoParticle>());
 
                 counter++;
             }

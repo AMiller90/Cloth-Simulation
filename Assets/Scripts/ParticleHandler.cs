@@ -20,12 +20,12 @@ namespace Assets.Scripts
         { // If left mouse click
             if (Input.GetMouseButtonDown(0))
             { // If the ray hits an object and its a particle that is not null
-                if (this.ShootRay() != null && this.ShootRay().GetComponent<Particle>() != null)
+                if (this.ShootRay() != null && this.ShootRay().GetComponent<MonoParticle>() != null)
                 { // Set current object to the returned object
                     this.current = this.ShootRay();
 
                     // Set the particles anchor to opposite of what it currently is
-                    this.current.GetComponent<Particle>().Anchor = this.current.GetComponent<Particle>().Anchor != true;
+                    this.current.GetComponent<MonoParticle>().ParticleRef.Anchor = this.current.GetComponent<MonoParticle>().ParticleRef.Anchor != true;
                 }
                 else
                 { // Set to null

@@ -8,13 +8,18 @@ namespace Assets.Scripts
     /// <summary>
     /// The particle.
     /// </summary>
-    public class Particle : MonoBehaviour
+    public class Particle
     {
         /// <summary>
         /// The velocity.
         /// </summary>
         [SerializeField]
         private Vector3 velocity;
+
+        /// <summary>
+        /// The position.
+        /// </summary>
+        private Vector3 position;
 
         /// <summary>
         /// The acceleration.
@@ -44,14 +49,17 @@ namespace Assets.Scripts
         /// <summary>
         /// The mass.
         /// </summary>
-        [SerializeField]
         private float mass;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Particle"/> class.
         /// </summary>
-        public Particle()
+        /// <param name="a_Position">
+        /// The position to be set
+        /// </param>
+        public Particle(Vector3 a_Position)
         {
+            this.position = a_Position;
             this.velocity = Vector3.zero;
             this.force = Vector3.zero;
             this.mass = 1;
@@ -108,8 +116,8 @@ namespace Assets.Scripts
         /// </summary>
         public Vector3 Position
         {
-            get { return this.transform.position; }
-            set { this.transform.position = value; }
+            get { return this.position; }
+            set { this.position = value; }
         }
 
         /// <summary>
@@ -135,7 +143,7 @@ namespace Assets.Scripts
         /// <summary>
         /// The update particle.
         /// </summary>
-        public void UpdateParticle()
+        public Vector3 UpdateParticle()
         {
             // Get acceleration
             this.acceleration = (1f / this.mass) * this.force;
@@ -147,7 +155,7 @@ namespace Assets.Scripts
             this.velocity = Vector3.ClampMagnitude(this.velocity, this.velocity.magnitude);
 
             // Move the particle
-            this.transform.position += this.velocity * Time.fixedDeltaTime;
+            return this.position += this.velocity * Time.fixedDeltaTime;
         }
     }
 }

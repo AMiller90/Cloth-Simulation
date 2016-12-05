@@ -160,7 +160,7 @@ namespace Assets.Scripts
         public bool BreakHappens(float a_BreakMultiplyer)
         {
             // If true then we will be removing the neighbor from the particle
-            if ((this.p2.transform.position - this.p1.transform.position).magnitude > this.lo * a_BreakMultiplyer)
+            if ((this.p2.Position - this.p1.Position).magnitude > this.lo * a_BreakMultiplyer)
             {
                 if (this.p2.Neighbors.Contains(this.p1))
                 {
